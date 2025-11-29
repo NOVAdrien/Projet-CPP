@@ -1,79 +1,110 @@
 # include <iostream>
-# include <vector>
-# include <functional>
 # include <cmath>
 # include <iomanip>
-# include "Fonction.cpp"
+
+# include "MethodeOptimisation.hpp"
 
 using namespace std;
-using Vecteur  = vector<float>;
-using Gradient = function<Vecteur (const Vecteur&)>;
 
-class MethodeOptimisation
+MethodeOptimisation::MethodeOptimisation(Fonction f, Gradient grad, float epsilon, int maxIters)
+    : f_(move(f)), grad_(move(grad)), epsilon_(epsilon), maxIters_(maxIters) {}
+
+Vecteur MethodeOptimisation::run(const Vecteur& x0)
 {
-protected:
-    Fonction f_;
-    Gradient grad_;
-    float epsilon_;
-    int   maxIters_;
+    Vecteur xk = x0;
+    int k = 0;
 
-    virtual Vecteur direction_deplacement(const Vecteur& xk) = 0;
-    virtual Vecteur direction_realisable(const Vecteur& xk) = 0;
-    virtual float pas_de_deplacement(const Vecteur& xk, const Vecteur& dk) = 0;
-
-public:
-    MethodeOptimisation(Fonction f, Gradient grad, float epsilon, int maxIters)
-        : f_(std::move(f)), grad_(std::move(grad)), epsilon_(epsilon), maxIters_(maxIters) {}
-
-    virtual ~MethodeOptimisation() = default;
-
-    Vecteur run(const Vecteur& x0)
+    while (k < maxIters_)
     {
-        cout << "Point initial : (" << x0[0] << ", " << x0[1] << ")" << endl;
-        cout << "Fonction : x1^2 + 2*x2^2" << endl << endl;
-        cout << "Méthode : Descente Gradient" << endl;
-        cout << "Max-iters : " << maxIters_ << endl << endl;
-        cout << "Iter.\tObj.\t\t||Grad||\tPoint"<< endl;
+        float fx = f_(xk);
+        Vecteur gk = grad_(xk);
 
-        Vecteur xk = x0;
-        int k = 0;
+        float ng = 0.f;
+        for (float v : gk) ng += v * v;
+        ng = sqrt(ng);
 
-        while (k < maxIters_)
-        {
-            float fx = f_(xk);
+        points_.push_back(xk);
+        valeurs_.push_back(fx);
+        normes_grad_.push_back(ng);
 
-            Vecteur gk = grad_(xk);
-            float ng = 0.f;
-            for (float v : gk) ng += v * v;
-            ng = sqrt(ng);
+        if (ng <= epsilon_)
+            break;
 
-            // affichage toutes les 10 itérations
-            if (k % 10 == 0)
-            {
-                cout << fixed << std::setprecision(5) << k << "\t" << fx << "\t" << scientific << ng << "\t" << "(" << std::fixed << std::setprecision(2) << xk[0] << ", " << xk[1] << ")" << endl;
-            }
+        Vecteur dk = direction_deplacement(xk);
+        float lambda = pas_de_deplacement(xk, dk);
 
-            if (ng <= epsilon_)
-            {
-                break;
-            }
+        for (size_t i = 0; i < xk.size(); ++i)
+            xk[i] += lambda * dk[i];
 
-            Vecteur dk = direction_deplacement(xk);
-            float lambda = pas_de_deplacement(xk, dk);
-
-            for (size_t i = 0; i < xk.size(); ++i)
-            {
-                xk[i] += lambda * dk[i];
-            }
-
-            ++k;
-        }
-
-        cout << endl << "Solution :" << endl;
-        cout << "  Statut : CONVERGENCE (Tolérance atteinte)" << endl;
-        cout << "  Solution : (" << fixed << setprecision(2) << xk[0] << ", " << xk[1] << ")" << endl;
-        cout << "  Valeur : " << fixed << setprecision(2) << f_(xk) << endl;
-
-        return xk;
+        ++k;
     }
-};
+
+    return points_.back();
+}
+
+
+void MethodeOptimisation::plot() const
+{
+    const string margin = "   ";
+
+    cout << "\n" << "Sorties-1\n";
+    cout << "---\n";
+    cout << "--- Descente de Gradient (Pas Fixe)\n";
+    cout << "---\n\n";
+
+    // ---------- SECTION INITIALE ----------
+    const int labelWidth = 14;
+
+    cout << margin << right << setw(labelWidth) << "Point initial" << " :  ("
+              << fixed << setprecision(2)
+              << points_[0][0] << ", " << points_[0][1] << ")\n";
+
+    cout << margin << right << setw(labelWidth) << "Fonction" << " : x1^2 + 2*x2^2\n";
+    cout << margin << right << setw(labelWidth+1) << "Méthode" << " : Descente Gradient\n";
+    cout << margin << right << setw(labelWidth) << "Max-iters" << " : " << maxIters_ << "\n\n";
+
+    // ---------- EN-TÊTES ITÉRATIONS ----------
+    cout << margin << right;
+    cout << setw(12) << "Iter.";
+    cout << setw(16) << "Obj.";
+    cout << setw(18) << "||Grad||";
+    cout << setw(20) << "Point";
+    cout << "\n";
+
+    // ---------- LIGNES D’ITÉRATIONS ----------
+    for (size_t k = 0; k < points_.size(); ++k)
+    {
+        if (k % 10 == 0)
+        {
+            cout << margin << setw(12) << k;
+            cout << setw(16) << fixed << setprecision(5) << valeurs_[k];
+            cout << setw(18) << scientific << setprecision(2) << normes_grad_[k];
+
+            ostringstream pt;
+            pt << fixed << setprecision(2)
+               << "(" << points_[k][0] << ", " << points_[k][1] << ")";
+            cout << setw(20) << pt.str() << "\n";
+        }
+    }
+
+    // ---------- SECTION SOLUTION ----------
+    cout << "\n" << margin << "Solution : \n";
+
+    bool convergence = normes_grad_.back() <= epsilon_;
+    const int solLabelWidth = 20;
+
+    if (convergence)
+        cout << margin << setw(solLabelWidth) << right << "Statut :"
+                  << " CONVERGENCE (Tolérance atteinte)\n";
+    else
+        cout << margin << setw(solLabelWidth) << right << "Statut :"
+                  << " ECHEC (Max itérations atteintes)\n";
+
+    cout << margin << setw(solLabelWidth) << right << "Solution :"
+              << " (" << fixed << setprecision(2)
+              << points_.back()[0] << ", " << points_.back()[1] << ")\n";
+
+    cout << margin << setw(solLabelWidth) << right << "Valeur :"
+              << " " << fixed << setprecision(2)
+              << valeurs_.back() << "\n";
+}
