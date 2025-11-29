@@ -19,8 +19,9 @@ Vecteur MethodeOptimisation::run(const Vecteur& x0)
         float fx = f_(xk);
         Vecteur gk = grad_(xk);
 
-        float ng = 0.f;
-        for (float v : gk) ng += v * v;
+        float ng = 0;
+        for (float v : gk)
+            ng += v * v;
         ng = sqrt(ng);
 
         points_.push_back(xk);
@@ -43,23 +44,28 @@ Vecteur MethodeOptimisation::run(const Vecteur& x0)
 }
 
 
-void MethodeOptimisation::plot() const
+void MethodeOptimisation::print() const
 {
     const string margin = "   ";
 
-    cout << "\n" << "Sorties-1\n";
-    cout << "---\n";
+    cout << "\n---\n";
     cout << "--- Descente de Gradient (Pas Fixe)\n";
     cout << "---\n\n";
 
     // ---------- SECTION INITIALE ----------
     const int labelWidth = 14;
+    const int solLabelWidth = 20;
 
-    cout << margin << right << setw(labelWidth) << "Point initial" << " :  ("
-              << fixed << setprecision(2)
-              << points_[0][0] << ", " << points_[0][1] << ")\n";
+    cout << margin << right << setw(labelWidth) << "Point initial" << " :  (";
+    for (size_t i = 0; i < points_[0].size(); ++i)
+    {
+        cout << fixed << setprecision(2) << points_[0][i];
+        if (i != points_[0].size() - 1)
+            cout << ", ";
+    }
+    cout << ")\n";
 
-    cout << margin << right << setw(labelWidth) << "Fonction" << " : x1^2 + 2*x2^2\n";
+    cout << margin << right << setw(labelWidth) << "Fonction" << " : " << f_.getNom() << "\n";
     cout << margin << right << setw(labelWidth+1) << "Méthode" << " : Descente Gradient\n";
     cout << margin << right << setw(labelWidth) << "Max-iters" << " : " << maxIters_ << "\n\n";
 
@@ -81,17 +87,23 @@ void MethodeOptimisation::plot() const
             cout << setw(18) << scientific << setprecision(2) << normes_grad_[k];
 
             ostringstream pt;
-            pt << fixed << setprecision(2)
-               << "(" << points_[k][0] << ", " << points_[k][1] << ")";
+            pt << "(";
+            for (size_t i = 0; i < points_[k].size(); ++i)
+            {
+                pt << fixed << setprecision(2) << points_[k][i];
+                if (i != points_[k].size() - 1)
+                    pt << ", ";
+            }
+            pt << ")";
             cout << setw(20) << pt.str() << "\n";
         }
     }
 
+    cout << endl;
+
     // ---------- SECTION SOLUTION ----------
     cout << "\n" << margin << "Solution : \n";
-
     bool convergence = normes_grad_.back() <= epsilon_;
-    const int solLabelWidth = 20;
 
     if (convergence)
         cout << margin << setw(solLabelWidth) << right << "Statut :"
@@ -100,9 +112,14 @@ void MethodeOptimisation::plot() const
         cout << margin << setw(solLabelWidth) << right << "Statut :"
                   << " ECHEC (Max itérations atteintes)\n";
 
-    cout << margin << setw(solLabelWidth) << right << "Solution :"
-              << " (" << fixed << setprecision(2)
-              << points_.back()[0] << ", " << points_.back()[1] << ")\n";
+    cout << margin << setw(solLabelWidth) << right << "Solution :" << " (";
+    for (size_t i = 0; i < points_.back().size(); ++i)
+    {
+        cout << fixed << setprecision(2) << points_.back()[i];
+        if (i != points_.back().size() - 1)
+            cout << ", ";
+    }
+    cout << ")\n";
 
     cout << margin << setw(solLabelWidth) << right << "Valeur :"
               << " " << fixed << setprecision(2)

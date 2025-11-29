@@ -32,7 +32,7 @@ public:
 
     Vecteur run(const Vecteur& x0);
     
-    void plot() const;
+    void print() const;
 };
 
 # endif
