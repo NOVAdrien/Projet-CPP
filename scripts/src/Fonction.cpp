@@ -1,26 +1,16 @@
-# include <vector>
-# include <functional>
+# include "Fonction.hpp"
 
 using namespace std;
 
-class Fonction
+Fonction::Fonction(int n, FuncType f, const string& nom)
+    : n_(n), f_(move(f)), nom_(nom) {}
+
+float Fonction::operator()(const Vecteur& x) const
 {
-public:
-    using FuncType = function<float (const vector<float>&)>;
+    return f_(x);
+}
 
-    Fonction(int argc, FuncType f) : n(argc), f_(move(f)) {}
-
-    Fonction() : n(0), f_() {}
-
-    ~Fonction() = default;
-
-    // permet de faire : f_obj(x)
-    float operator()(const vector<float>& x) const
-    {
-        return f_(x);
-    }
-
-private:
-    int n;        // dimension (info utile si besoin)
-    FuncType f_;  // la vraie fonction
-};
+string Fonction::getNom() const
+{
+    return nom_;
+}

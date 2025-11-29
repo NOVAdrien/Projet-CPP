@@ -1,28 +1,27 @@
-#ifndef FONCTION_HPP
-#define FONCTION_HPP
+# ifndef FONCTION_HPP
+# define FONCTION_HPP
 
-#include <functional>
-#include <vector>
+# include <functional>
+# include <vector>
+# include <string>
 
-class Fonction {
-public:
-    Fonction(
-        int argc,
-        std::function<int (std::vector<int>)> f
-        // vector<int> (*gradf)(vector<int> x)
-    );
+using namespace std;
+using Vecteur = vector<float>;
+using FuncType = function<float(const Vecteur&)>;
 
-    Fonction(Fonction &&) = default;
-    Fonction(const Fonction &) = default;
-    Fonction &operator=(Fonction &&) = default;
-    Fonction &operator=(const Fonction &) = default;
-    ~Fonction();
-
-    std::function<int (std::vector<int>)> f;
-    // int f(std::vector<int> x);
-    // vector<int> gradf(vector<int> x);
-
+class Fonction
+{
 private:
-    int n;
+    int n_;
+    FuncType f_;
+    string nom_;
+
+public:
+    Fonction(int n, FuncType f, const string& nom = "");
+    Fonction() = default;
+    float operator()(const Vecteur& x) const;
+
+    string getNom() const;
 };
-#endif // !FONCTION_HPP
+
+# endif
