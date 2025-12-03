@@ -33,5 +33,6 @@ Vecteur grad_r(const Vecteur& x)
 {
     float dx = -2*(1 - x[0]) - 400*x[0]*(x[1]-x[0]*x[0]);
     float dy = 200*(x[1]-x[0]*x[0]);
+    
     return { dx, dy };
 }

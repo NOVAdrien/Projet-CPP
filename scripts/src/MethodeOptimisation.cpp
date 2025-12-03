@@ -20,8 +20,12 @@ Vecteur MethodeOptimisation::run(const Vecteur& x0)
         Vecteur gk = grad_(xk);
 
         float ng = 0;
+
         for (float v : gk)
+        {
             ng += v * v;
+        }
+
         ng = sqrt(ng);
 
         points_.push_back(xk);
@@ -29,13 +33,17 @@ Vecteur MethodeOptimisation::run(const Vecteur& x0)
         normes_grad_.push_back(ng);
 
         if (ng <= epsilon_)
+        {
             break;
+        }
 
         Vecteur dk = direction_deplacement(xk);
         float lambda = pas_de_deplacement(xk, dk);
 
         for (size_t i = 0; i < xk.size(); ++i)
+        {
             xk[i] += lambda * dk[i];
+        }
 
         ++k;
     }
@@ -57,12 +65,17 @@ void MethodeOptimisation::print() const
     const int solLabelWidth = 20;
 
     cout << margin << right << setw(labelWidth) << "Point initial" << " :  (";
+
     for (size_t i = 0; i < points_[0].size(); ++i)
     {
         cout << fixed << setprecision(2) << points_[0][i];
+
         if (i != points_[0].size() - 1)
+        {
             cout << ", ";
+        }
     }
+    
     cout << ")\n";
 
     cout << margin << right << setw(labelWidth) << "Fonction" << " : " << f_.getNom() << "\n";
@@ -88,12 +101,16 @@ void MethodeOptimisation::print() const
 
             ostringstream pt;
             pt << "(";
+
             for (size_t i = 0; i < points_[k].size(); ++i)
             {
                 pt << fixed << setprecision(2) << points_[k][i];
                 if (i != points_[k].size() - 1)
+                {
                     pt << ", ";
+                }
             }
+
             pt << ")";
             cout << setw(20) << pt.str() << "\n";
         }
@@ -106,19 +123,27 @@ void MethodeOptimisation::print() const
     bool convergence = normes_grad_.back() <= epsilon_;
 
     if (convergence)
+    {
         cout << margin << setw(solLabelWidth) << right << "Statut :"
                   << " CONVERGENCE (Tolérance atteinte)\n";
+    }
     else
+    {
         cout << margin << setw(solLabelWidth) << right << "Statut :"
                   << " ECHEC (Max itérations atteintes)\n";
+    }
 
     cout << margin << setw(solLabelWidth) << right << "Solution :" << " (";
+
     for (size_t i = 0; i < points_.back().size(); ++i)
     {
         cout << fixed << setprecision(2) << points_.back()[i];
         if (i != points_.back().size() - 1)
+        {
             cout << ", ";
+        }
     }
+
     cout << ")\n";
 
     cout << margin << setw(solLabelWidth) << right << "Valeur :"
