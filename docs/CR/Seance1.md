@@ -7,9 +7,9 @@ L’objectif principal était de :
 
 - Implémenter une **méthode de descente du gradient** avec un **pas fixe** (`alpha = 0.1`)
 - Tester la méthode sur trois fonctions :
-  - `q1(x1,x2) = x1² + 2*x2²`
-  - `q2(x1,x2,x3) = x1² + 2*x2² + 3*x3²`
-  - `r(x1,x2) = (1-x1)² + 100*(x2-x1²)²` (fonction de Rosenbrock)
+  - `q1(x1,x2) = x1^2 + 2*x2^2`
+  - `q2(x1,x2,x3) = x1^2 + 2*x2^2 + 3*x3^2`
+  - `r(x1,x2) = (1-x1)^2 + 100*(x2-x1^2)^2` (fonction de Rosenbrock)
 - Vérifier la convergence des méthodes et analyser les résultats
 
 Nous avons commencé par définir des **classes C++** pour structurer le projet : `Fonction` pour représenter une fonction et son nom, 'Fonctions' pour implémenter les fonctions précises, `MethodeOptimisation` pour la logique de descente, et `MethodeDescente` pour la spécialisation avec pas fixe.
@@ -101,7 +101,7 @@ Valeur : 0.00
 
 ```
 
-### 3.3 Fonction r(x1,x2) = (1-x1)^2 + 100*(x2-x1²)^2 (Rosenbrock)
+### 3.3 Fonction r(x1,x2) = (1-x1)^2 + 100*(x2-x1^2)^2 (Rosenbrock)
 
 ```
 
