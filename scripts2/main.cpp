@@ -1,55 +1,66 @@
 #include <vector>
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <iomanip>
 #include <string>
 
+#include "FonctionObjective.hpp"
+
 using namespace std;
 
-float f_(std::vector<float> x) {
+float f_(std::array<float, 2> x) {
     return x[0]*x[0] + 2*x[1]*x[1];
 }
 
-std::vector<float> grad_(std::vector<float> x) {
-    std::vector<float> gradfx;
+std::array<float,2> gradf_(std::array<float,2> x) {
+    std::array<float,2> gradfx = {0, 0};
 
-    gradfx.push_back(2*x[0]);
-    gradfx.push_back(4*x[1]);
+    gradfx[0] = 2*x[0];
+    gradfx[0] = 4*x[1];
 
     return gradfx;
 }
 
-std::vector<float> direction_realisable(const std::vector<float>& xk)
+std::array<float,2> direction_realisable(const std::array<float,2>& xk)
 {
-    std::vector<float> g = grad_(xk);
+    std::array<float,2> g = gradf_(xk);
     for (float& v : g) v = -v;
     return g;
 }
 
-std::vector<float> direction_deplacement(const std::vector<float>& xk) 
+std::array<float,2> direction_deplacement(const std::array<float,2>& xk) 
 {
     return direction_realisable(xk);
 }
 
 int main (int argc, char *argv[]) {
 
+    FonctionObjective<2> f(
+        f_,
+        gradf_,
+        "x0² + 2*x1²"
+    );
+
     int maxIters_ = 1000;
-    std::vector<float> x0 = {2, 5};
+    std::array<float,2> x0 = {2, 5};
+
+    // cout << f.f_(x0) << endl;
 
     float epsilon_ = 0.000001;
     float alpha_ = 0.1;
 
-    std::vector<float> xk = x0;
+    std::array<float,2> xk = x0;
     int k = 0;
 
-    std::vector<std::vector<float>> points_;
+    std::vector<std::array<float,2>> points_;
     std::vector<float> valeurs_;
     std::vector<float> normes_grad_;
 
     while (k < maxIters_)
     {
-        float fx = f_(xk);
-        std::vector<float> gk = grad_(xk);
+        float fx = f.f_(xk);
+        std::array<float,2> gk = f.gradf_(xk);
 
         float ng = 0;
 
@@ -69,7 +80,7 @@ int main (int argc, char *argv[]) {
             break;
         }
 
-        std::vector<float> dk = direction_deplacement(xk);
+        std::array<float,2> dk = direction_deplacement(xk);
         float lambda = alpha_;
 
         for (size_t i = 0; i < xk.size(); ++i)
@@ -107,7 +118,7 @@ int main (int argc, char *argv[]) {
     
     cout << ")\n";
 
-    cout << margin << right << setw(labelWidth) << "Fonction" << " : vla la fonction\n";
+    cout << margin << right << setw(labelWidth) << "Fonction" << " : " << f.getNom() << "\n";
     cout << margin << right << setw(labelWidth+1) << "Méthode" << " : Descente Gradient\n";
     cout << margin << right << setw(labelWidth) << "Max-iters" << " : " << maxIters_ << "\n\n";
 
