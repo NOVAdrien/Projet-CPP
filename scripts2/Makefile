@@ -5,7 +5,7 @@ INC_DIR = includes
 BUILD_DIR = build
 
 CXX = g++
-CXXFLAGS = -Wall -I$(INC_DIR)
+CXXFLAGS = -I$(INC_DIR)
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp) main.cpp
 OBJS = $(SRCS:%.cpp=$(BUILD_DIR)/%.o)
