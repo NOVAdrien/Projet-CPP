@@ -1,40 +1,30 @@
-# ifndef FONCTION_OBJECTIVE_HPP
-# define FONCTION_OBJECTIVE_HPP
+# ifndef FONCTIONOBJECTIVE_HPP
+# define FONCTIONOBJECTIVE_HPP
 
-# include <functional>
-# include <array>
 # include <string>
+# include "Vecteur.hpp"
 
 using namespace std;
-
-// template <size_t N>
-// using array<float, N> = array<float, N>;
-//
-// template <size_t N>
-// using function<float(const array<float, N>&)> = function<float(const array<float, N>&)>;
-//
-// template <size_t N>
-// using function<array<float, N>(const array<float, N>&)> = function<array<float, N>(const array<float, N>&)>;
 
 template <size_t N>
 class FonctionObjective
 {
+public:
+    using V = Vecteur<N>;
+
+    FonctionObjective(const string& nom = "") : nom_(nom) {}
+    virtual ~FonctionObjective() = default;
+
+    virtual double evaluer(const V& x) const = 0;
+    virtual V calculerGradient(const V& x) const = 0;
+
+    string getNom() const
+    {
+        return nom_;
+    }
+
 private:
     string nom_;
-
-public:
-    FonctionObjective(
-        function<float(const array<float, N>&)> f,
-        function<array<float, N>(const array<float, N>&)> gradf,
-        const string& nom = ""
-    );
-    FonctionObjective() = default;
-    // float operator()(const array<float, N>& x) const;
-
-    function<float(const array<float, N>&)> f_;
-    function<array<float, N>(const array<float, N>&)> gradf_;
-
-    string getNom() const;
 };
 
 # endif
