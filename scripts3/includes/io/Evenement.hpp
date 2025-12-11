@@ -7,6 +7,7 @@
 
 using namespace std;
 
+template <size_t N>
 class Evenement
 {
 public:

@@ -5,12 +5,15 @@
 # include <iostream>
 # include "../Evenement.hpp"
 
-class EvenementTerminaison : public Evenement
+template <size_t N>
+class EvenementTerminaison : public Evenement<N>
 {
 private:
+    int maxIt;
+    double eps;
 
 public:
-    EvenementTerminaison() : {}
+    EvenementTerminaison(int maxIters, double epsilon) : maxIt(maxIters), eps(epsilon) {}
 
     void display()
     {

@@ -5,12 +5,13 @@
 # include <iostream>
 # include "../Evenement.hpp"
 
-class EvenementIteration : public Evenement
+template <size_t N>
+class EvenementIteration : public Evenement<N>
 {
 private:
 
 public:
-    EvenementIteration() : {}
+    EvenementIteration() {}
 
     void display()
     {

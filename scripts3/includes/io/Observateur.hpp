@@ -2,6 +2,7 @@
 #define OBSERVATEUR_HPP
 
 #include <vector>
+# include "Evenement.hpp"
 
 template <size_t N>
 class Observateur {
