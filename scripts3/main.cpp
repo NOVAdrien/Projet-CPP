@@ -107,7 +107,7 @@ int main()
     // Fonctions
     Q1 q1("x0^2 + 2*x1^2");
 
-    EvenementDemarrage event(maxIters, epsilon);
+    EvenementDemarrage<2> event(maxIters, epsilon);
     event.display();
 
     // Choisir l'optimiseur : DescenteGradient (pas fixe) ou PlusFortePente

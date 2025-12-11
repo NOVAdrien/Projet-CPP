@@ -7,7 +7,8 @@
 
 using namespace std;
 
-class Evenement
+template <size_t N>
+class Evenement<N>
 {
 public:
     virtual ~Evenement() = default;

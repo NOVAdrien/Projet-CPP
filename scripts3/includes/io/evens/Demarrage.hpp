@@ -4,16 +4,18 @@
 # include <string>
 # include <iostream>
 # include "../Evenement.hpp"
-# include "FonctionObjective.hpp"
+# include "../../FonctionObjective.hpp"
 
-class EvenementDemarrage : public Evenement
+template <size_t N>
+class EvenementDemarrage<N> : public Evenement<N>
 {
 private:
     int maxIt;
     double eps;
+    FonctionObjective<2> func;
 
 public:
-    EvenementDemarrage(int maxIters, double epsilon) : maxIt(maxIters), eps(epsilon) {}
+    EvenementDemarrage <N>(FonctionObjective f, int maxIters, double epsilon) : func(f), maxIt(maxIters), eps(epsilon) {}
 
     void display()
     {
