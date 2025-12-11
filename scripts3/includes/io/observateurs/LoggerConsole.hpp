@@ -6,12 +6,12 @@
 #include <iostream>
 #include <iomanip>
 
-#include "../Observateur.h"
-#include "../Evenement.h"
+#include "../Observateur.hpp"
+#include "../Evenement.hpp"
 
-#include "../evens/Demarrage.h"
-#include "../evens/Iteration.h"
-#include "../evens/Terminaison.h"
+#include "../evens/Demarrage.hpp"
+#include "../evens/Iteration.hpp"
+#include "../evens/Terminaison.hpp"
 
 
 template < size_t N >
