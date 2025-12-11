@@ -10,6 +10,7 @@
 # include "./includes/PlusFortePente.hpp"
 # include "./includes/io/Evenement.hpp"
 # include "./includes/io/evens/Demarrage.hpp"
+# include "./includes/io/evens/Terminaison.hpp"
 
 using namespace std;
 
@@ -107,15 +108,18 @@ int main()
     // Fonctions
     Q1 q1("x0^2 + 2*x1^2");
 
-    EvenementDemarrage event(maxIters, epsilon);
-    event.display();
+    EvenementDemarrage<2> event_d(maxIters, epsilon);
+    event_d.display();
 
     // Choisir l'optimiseur : DescenteGradient (pas fixe) ou PlusFortePente
-    DescenteGradient<2> optim1(q1, maxIters, epsilon, alpha);
-    // PlusFortePente<2> optim1(q1, maxIters, epsilon, alpha);
+    // DescenteGradient<2> optim1(q1, maxIters, epsilon, alpha);
+    PlusFortePente<2> optim1(q1, maxIters, epsilon, alpha);
 
     // Lancer optimisation
     optim1.optimiser(x1);
+
+    EvenementTerminaison<2> event_t(maxIters, epsilon);
+    event_t.display();
 
 
 
@@ -132,12 +136,18 @@ int main()
     // Fonctions
     Q2 q2("x1^2 + 2*x2^2 + 3*x3^2");
 
+    EvenementDemarrage<2> event_d2(maxIters, epsilon);
+    event_d2.display();
+
     // Choisir l'optimiseur : DescenteGradient (pas fixe) ou PlusFortePente
     DescenteGradient<3> optim2(q2, maxIters, epsilon, alpha);
     // PlusFortePente<3> optim2(q2, maxIters, epsilon, alpha);
 
     // Lancer optimisation
     optim2.optimiser(x2);
+
+    EvenementTerminaison<2> event_t2(maxIters, epsilon);
+    event_t2.display();
 
 
 
@@ -153,12 +163,18 @@ int main()
     // Fonctions
     R r("(1 - x1)^2 + 100*(x2 - x1^2)^2");
 
+    EvenementDemarrage<2> event_d3(maxIters, epsilon);
+    event_d3.display();
+
     // Choisir l'optimiseur : DescenteGradient (pas fixe) ou PlusFortePente
     DescenteGradient<2> optim3(r, maxIters, epsilon, alpha);
     // PlusFortePente<2> optim3(r, maxIters, epsilon, alpha);
 
     // Lancer optimisation
     optim3.optimiser(x3);
+
+    EvenementTerminaison<2> event_t3(maxIters, epsilon);
+    event_t3.display();
 
     return 0;
 }

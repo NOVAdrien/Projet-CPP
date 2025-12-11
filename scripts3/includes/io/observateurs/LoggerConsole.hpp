@@ -14,7 +14,7 @@
 #include "../evens/Terminaison.hpp"
 
 
-template < size_t N >
+template <size_t N>
 class LoggerConsole: public Observateur < N > {
     private: int frequence_; // Ex: 1 (tout), 10 (tous les 10), 100 (tous les 100)
 
@@ -29,13 +29,13 @@ class LoggerConsole: public Observateur < N > {
 
             std::cout << std::setw(3) << "" << "Point initial : ";
             e -> x_initial.print();
-            std::cout << std::endl;, →
+            std::cout << std::endl;
             std::cout << std::setw(3) << "" << " Fonction : " << e -> nom_fonction <<
-                std::endl;, →
+                std::endl;
             std::cout << std::setw(3) << "" << " Méthode : " << e -> nom_methode <<
-                std::endl;, →
+                std::endl;
             std::cout << std::setw(3) << "" << " Max-iters : " << e -> max_iter <<
-                std::endl << std::endl;, →
+                std::endl << std::endl;
 
             // En-tête
             std::cout << std::setw(8) << "Iter." << std::setw(3) << " ";
@@ -68,9 +68,9 @@ class LoggerConsole: public Observateur < N > {
             std::cout << std::setw(5) << "" << " Statut : " << e -> status << std::endl;
             std::cout << std::setw(5) << "" << " Solution : ";
             e -> solution_finale.print();
-            std::cout << std::endl;, →
+            std::cout << std::endl;
             std::cout << std::setw(5) << "" << " Valeur : " << std::fixed <<
-                std::setprecision(5) << e -> f_final << std::endl;, →
+                std::setprecision(5) << e -> f_final << std::endl;
         }
     }
 };

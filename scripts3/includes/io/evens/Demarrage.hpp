@@ -6,7 +6,8 @@
 # include "../Evenement.hpp"
 # include "FonctionObjective.hpp"
 
-class EvenementDemarrage : public Evenement
+template <size_t N>
+class EvenementDemarrage : public Evenement<N>
 {
 private:
     int maxIt;
