@@ -8,6 +8,8 @@
 # include "./includes/FonctionObjective.hpp"
 # include "./includes/DescenteGradient.hpp"
 # include "./includes/PlusFortePente.hpp"
+# include "./includes/io/Evenement.hpp"
+# include "./includes/io/evens/Demarrage.hpp"
 
 using namespace std;
 
@@ -104,6 +106,9 @@ int main()
 
     // Fonctions
     Q1 q1("x0^2 + 2*x1^2");
+
+    EvenementDemarrage event(maxIters, epsilon);
+    event.display();
 
     // Choisir l'optimiseur : DescenteGradient (pas fixe) ou PlusFortePente
     DescenteGradient<2> optim1(q1, maxIters, epsilon, alpha);
